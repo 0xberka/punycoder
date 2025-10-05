@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import argparse
+import punycoder
+import sys
+
+def main():
+	parser = argparse.ArgumentParser(
+		description="Command-line tool for encoding and decoding Punycode domain names"
+	)
+	group = parser.add_mutually_exclusive_group(required=True)
+	group.add_argument("-e", "--encode", metavar="DOMAIN", help="Encode Unicode domain to Punycode")
+	group.add_argument("-d", "--decode", metavar="DOMAIN", help="Decode Punycode domain to Unicode")
+
+	args = parser.parse_args()
+
+	try:
+		if args.encode:
+			print(punycoder.punycode_encode(args.encode))
+
+		elif args.decode:
+			print(punycoder.punycode_decode(args.decode))
+
+	except UnicodeError as err:
+		print("Error: {}".format(err), file=sys.stderr)
+		sys.exit(1)
+
+if __name__ == "__main__":
+	main()
